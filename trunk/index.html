@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PHPWOW</title>
+<style type="text/css">
+	*{margin:0; padding:0}
+	#chatWindow{background:#000; width:400px; height:200px; font-size:12px; line-height:14px; padding:5px}
+	.attack{color:red}
+	.hurt{color:#F0F}
+</style>
+</head>
+
+<body>
+	<div id="chatWindow">
+    </div>
+</body>
+</html>
+<script src="/js/jquery-1.7.1.min.js"></script>
+<script>
+	var damage;
+	var i = 0;
+	$(document).ready(function(){
+		$.post('http://phpwow', '', function(returnJson) {
+			damage = returnJson;
+			window.setInterval(view, 1000);
+		}, 'json');
+	});
+	
+	function view() {
+		var str = '';
+		if(damage[i].type == 'r') {
+			str = '怪物对你造成了';
+			str += damage[i].value + '点伤害';
+			$("#chatWindow").append('<p class="attack">' + str + '</p>');
+		}
+		if(damage[i].type == 'l') {
+			str = '你对怪物造成了';
+			str += damage[i].value + '点伤害';
+			$("#chatWindow").append('<p class="hurt">' + str + '</p>');
+		}
+		i++;
+		
+	}
+</script>
